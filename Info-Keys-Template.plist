@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Camera Permission -->
+    <key>NSCameraUsageDescription</key>
+    <string>We need camera access to scan and identify food items in your kitchen</string>
+
+    <!-- Photo Library Permission -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need photo library access to add food items from your photos</string>
+
+    <!-- Optional: Photo Library Add Permission (iOS 14+) -->
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We save photos of your food items to your library</string>
+
+    <!-- User Notifications -->
+    <!-- Note: UserNotifications framework handles this automatically, no Info.plist key needed -->
+</dict>
+</plist>

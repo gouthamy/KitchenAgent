@@ -1,0 +1,59 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║            KITCHEN AGENT - XCODE SETUP CHECKLIST                 ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+Follow these steps IN ORDER:
+
+□ STEP 1: Add Files to Project
+  ─────────────────────────────
+  1. Right-click on "KitchenAgent" folder in Project Navigator
+  2. Select "Add Files to KitchenAgent..."
+  3. Hold ⌘ (Command) and select these folders:
+     □ Models folder (4 files)
+     □ Services folder (3 files)
+     □ Views folder (12 files)
+  4. In the dialog, ensure:
+     ☑ "Create groups" is selected
+     ☑ "KitchenAgent" target is checked
+     ☐ "Copy items if needed" is UNCHECKED
+  5. Click "Add"
+
+□ STEP 2: Configure Info.plist
+  ────────────────────────────
+  1. Click "KitchenAgent" (blue icon) in Project Navigator
+  2. Select "KitchenAgent" under TARGETS
+  3. Go to "Info" tab
+  4. Click "+" button twice and add:
+     □ Privacy - Camera Usage Description
+       Value: We need camera access to scan and identify food items
+     □ Privacy - Photo Library Usage Description
+       Value: We need photo library access to add food items
+
+□ STEP 3: Enable Push Notifications
+  ─────────────────────────────────
+  1. Stay in "KitchenAgent" target
+  2. Go to "Signing & Capabilities" tab
+  3. Click "+ Capability"
+  4. Add "Push Notifications"
+
+□ STEP 4: Configure Signing
+  ──────────────────────────
+  1. In "Signing & Capabilities" tab
+  2. Check "Automatically manage signing"
+  3. Select your Team
+  4. Verify bundle identifier is set
+
+□ STEP 5: Build and Run
+  ─────────────────────
+  1. Select a simulator (iPhone 15 or later)
+  2. Press ⌘R to build and run
+  3. Wait for build to complete
+  4. Grant permissions when prompted
+
+═══════════════════════════════════════════════════════════════════
+
+Once completed, the app should launch successfully! 🚀
+
+For detailed instructions, see: BUILD_AND_RUN.md
