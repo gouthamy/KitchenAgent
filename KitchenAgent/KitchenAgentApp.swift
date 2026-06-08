@@ -12,7 +12,10 @@ import SwiftData
 struct KitchenAgentApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            FridgeItem.self,
+            Recipe.self,
+            ShoppingItem.self,
+            UserSettings.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -23,9 +26,19 @@ struct KitchenAgentApp: App {
         }
     }()
 
+    init() {
+        // Request notification permissions on app launch
+        Task {
+            try? await NotificationService.shared.requestAuthorization()
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
+                .onAppear {
+                    print("✅ App loaded successfully")
+                }
         }
         .modelContainer(sharedModelContainer)
     }
