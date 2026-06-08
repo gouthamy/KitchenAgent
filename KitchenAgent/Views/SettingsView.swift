@@ -96,14 +96,22 @@ struct SettingsView: View {
                     }
                 }
 
-                // AI Features (Optional)
-                Section(header: Text("AI Features (Optional)")) {
+                // AI Features
+                Section(header: Text("AI Features")) {
                     NavigationLink {
                         AISettingsView()
                     } label: {
-                        Label("ChatGPT API Key", systemImage: "brain.head.profile")
+                        HStack {
+                            Label("ChatGPT API Key", systemImage: "brain.head.profile")
+                            Spacer()
+                            if let apiKey = UserDefaults.standard.string(forKey: "chatgpt_api_key"), !apiKey.isEmpty {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                    .font(.caption)
+                            }
+                        }
                     }
-                    Text("Add your ChatGPT API key to get AI-powered recipe suggestions and smart item recognition")
+                    Text("Get AI-powered recipe suggestions based on your ingredients and preferences")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -200,18 +208,6 @@ struct ProfileEditView: View {
     }
 }
 
-struct RecipePreferencesView: View {
-    var body: some View {
-        Form {
-            Section("Dietary Restrictions") {
-                Toggle("Vegetarian", isOn: .constant(false))
-                Toggle("Vegan", isOn: .constant(false))
-                Toggle("Gluten-Free", isOn: .constant(false))
-            }
-        }
-        .navigationTitle("Recipe Preferences")
-    }
-}
 
 struct FamilySharingView: View {
     var body: some View {

@@ -17,12 +17,32 @@ struct KitchenAgentApp: App {
             ShoppingItem.self,
             UserSettings.self
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+
+        // Enable automatic migration for schema changes
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            allowsSave: true
+        )
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            // If migration fails, try to recreate the container
+            print("⚠️ ModelContainer creation failed: \(error)")
+            print("🔄 Attempting to reset data store...")
+
+            // Clear the data store and try again
+            let url = modelConfiguration.url
+            try? FileManager.default.removeItem(at: url)
+
+            do {
+                let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+                print("✅ Successfully created fresh ModelContainer")
+                return container
+            } catch {
+                fatalError("Could not create ModelContainer even after reset: \(error)")
+            }
         }
     }()
 

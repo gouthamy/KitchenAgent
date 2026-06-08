@@ -40,7 +40,7 @@ struct InventoryView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Search Bar
+                // Search Bar - Fixed at top
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
@@ -53,7 +53,7 @@ struct InventoryView: View {
                 .padding(.horizontal)
                 .padding(.top)
 
-                // Filter Pills
+                // Filter Pills - Fixed below search
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
                         FilterPill(
@@ -77,13 +77,15 @@ struct InventoryView: View {
                 }
                 .padding(.vertical)
 
-                // Items Grid
+                // Items Grid or Empty State - Scrollable content
                 if filteredItems.isEmpty {
+                    Spacer()
                     EmptyStateView(
                         icon: "tray",
                         title: "No Items",
                         message: "Add items to your inventory to get started"
                     )
+                    Spacer()
                 } else {
                     ScrollView {
                         LazyVGrid(columns: [
@@ -97,6 +99,19 @@ struct InventoryView: View {
                                     InventoryItemCard(item: item)
                                 }
                                 .buttonStyle(PlainButtonStyle())
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        deleteItem(item)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+
+                                    Button {
+                                        // Edit action would go here
+                                    } label: {
+                                        Label("Edit", systemImage: "pencil")
+                                    }
+                                }
                             }
                         }
                         .padding()
@@ -116,6 +131,13 @@ struct InventoryView: View {
             .sheet(isPresented: $showingAddItem) {
                 AddItemView()
             }
+        }
+    }
+
+    private func deleteItem(_ item: FridgeItem) {
+        withAnimation {
+            NotificationService.shared.cancelNotification(for: item.id)
+            modelContext.delete(item)
         }
     }
 }

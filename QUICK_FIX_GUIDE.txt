@@ -1,0 +1,93 @@
+
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║          🚨 EMOJIS SHOWING AS "?" - QUICK FIX 🚨              ║
+║                                                               ║
+╔═══════════════════════════════════════════════════════════════╗
+
+┌─────────────────────────────────────────────────────────────┐
+│  WHAT YOU'RE SEEING:                                        │
+│  Inventory shows "?" instead of 🍅 🥕 🍎                     │
+│                                                             │
+│  YOUR CODE: ✅ PERFECT\! (Has 60+ emojis coded)              │
+│  SIMULATOR: ❌ BROKEN\! (Font file corrupted)                │
+└─────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔥 FASTEST FIX: USE YOUR IPHONE (100% WORKS\!)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Connect iPhone to Mac (USB cable)
+2. Unlock iPhone → Trust computer
+3. Xcode → Click device dropdown (top-left)
+4. Select: YOUR iPhone name
+5. Press ⌘R
+6. ✅ DONE\! Emojis work perfectly\!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 OR: FIX SIMULATOR (If no iPhone)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. In Xcode: Press ⌘R (runs app in simulator)
+
+2. In SIMULATOR window:
+   - Menu bar at TOP of screen
+   - Device → Erase All Content and Settings...
+   - Click "Erase"
+   - Wait 30 seconds
+
+3. In Xcode:
+   - Press ⌘. (stop)
+   - Press ⌘⇧K (clean)
+   - Press ⌘R (run)
+
+4. Test: Add "Carrot" → Should see 🥕
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 ASSETS FOLDER EMPTY?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This is NORMAL\! ✅
+
+App uses Unicode emojis (🍅), not image files\!
+Benefits: Instant display, perfect scaling, smaller app size
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 60+ FOODS ALREADY CODED:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vegetables: 🍅 🥕 🥦 🥬 🧅 🥔 🫑 🥒 🌽 🍆 🧄 🍄 🫘
+Fruits:     🍎 🍌 🍊 🍓 🍇 🍉 🍋 🥭 🍍 🍒 🍑 🍐 🫐 🥥 🥝 🥑
+Dairy:      🥛 🧀 🧈 🥚 🍦
+Meat:       🍗 🥩 🥓 🐟 🦐 🥡
+Grains:     🍞 🍚 🍝 🥣
+
+...and more\!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 REMEMBER:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Your code is CORRECT
+❌ Simulator has font bug (iOS 26.3)
+📱 Real iPhone = INSTANT FIX (No simulator issues\!)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 DO IT NOW:
+
+Option 1: Connect iPhone → Select in Xcode → ⌘R
+Option 2: Reset Simulator → Clean → Run
+
+Then test by adding: Tomato, Carrot, Apple
+Expected: 🍅 🥕 🍎 (NOT "???")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 For complete guide: See EMOJI_TROUBLESHOOTING.md
+

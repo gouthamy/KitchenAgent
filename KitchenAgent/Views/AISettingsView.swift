@@ -12,6 +12,13 @@ struct AISettingsView: View {
     @State private var showingAPIKey = false
     @State private var tempAPIKey = ""
     @State private var showingSaved = false
+    @State private var isTesting = false
+    @State private var testResult: TestResult? = nil
+
+    enum TestResult {
+        case success
+        case failure(String)
+    }
 
     var body: some View {
         Form {
@@ -133,6 +140,50 @@ struct AISettingsView: View {
             }
 
             if !apiKey.isEmpty {
+                Section("Test API Key") {
+                    Button {
+                        testAPIKey()
+                    } label: {
+                        HStack {
+                            Spacer()
+                            if isTesting {
+                                ProgressView()
+                                    .padding(.trailing, 8)
+                                Text("Testing...")
+                            } else {
+                                Image(systemName: "play.circle")
+                                Text("Test Connection")
+                            }
+                            Spacer()
+                        }
+                    }
+                    .disabled(isTesting)
+
+                    if let result = testResult {
+                        switch result {
+                        case .success:
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                Text("API Key is Valid!")
+                                    .foregroundColor(.green)
+                            }
+                        case .failure(let error):
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.red)
+                                    Text("Test Failed")
+                                        .foregroundColor(.red)
+                                }
+                                Text(error)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }
+
                 Section {
                     Button(role: .destructive) {
                         removeAPIKey()
@@ -164,6 +215,61 @@ struct AISettingsView: View {
         apiKey = ""
         tempAPIKey = ""
         showingAPIKey = false
+        testResult = nil
+    }
+
+    private func testAPIKey() {
+        isTesting = true
+        testResult = nil
+
+        Task {
+            do {
+                let isValid = try await validateAPIKey(apiKey)
+                await MainActor.run {
+                    isTesting = false
+                    testResult = isValid ? .success : .failure("Invalid API key")
+                }
+            } catch {
+                await MainActor.run {
+                    isTesting = false
+                    testResult = .failure(error.localizedDescription)
+                }
+            }
+        }
+    }
+
+    private func validateAPIKey(_ key: String) async throws -> Bool {
+        guard !key.isEmpty else {
+            throw NSError(domain: "APIError", code: 0, userInfo: [NSLocalizedDescriptionKey: "API key is empty"])
+        }
+
+        // OpenAI API test endpoint
+        guard let url = URL(string: "https://api.openai.com/v1/models") else {
+            throw NSError(domain: "APIError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 10
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NSError(domain: "APIError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
+        }
+
+        if httpResponse.statusCode == 200 {
+            return true
+        } else if httpResponse.statusCode == 401 {
+            throw NSError(domain: "APIError", code: 401, userInfo: [NSLocalizedDescriptionKey: "Invalid API key - Unauthorized"])
+        } else if httpResponse.statusCode == 429 {
+            throw NSError(domain: "APIError", code: 429, userInfo: [NSLocalizedDescriptionKey: "Rate limit exceeded - Try again later"])
+        } else {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+            throw NSError(domain: "APIError", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Error \(httpResponse.statusCode): \(errorMessage)"])
+        }
     }
 }
 

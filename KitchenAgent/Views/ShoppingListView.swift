@@ -27,7 +27,7 @@ struct ShoppingListView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Add Item Input
+                // Add Item Input - Fixed at top
                 HStack {
                     Image(systemName: "plus.circle.fill")
                         .foregroundColor(.green)
@@ -44,13 +44,15 @@ struct ShoppingListView: View {
                 .cornerRadius(10)
                 .padding()
 
-                // To Buy Section
+                // List Content - Scrollable or Empty State
                 if toBuyItems.isEmpty && recentlyBoughtItems.isEmpty {
+                    Spacer()
                     EmptyStateView(
                         icon: "cart",
                         title: "Your list is empty",
                         message: "Add items to your shopping list"
                     )
+                    Spacer()
                 } else {
                     List {
                         if !toBuyItems.isEmpty {

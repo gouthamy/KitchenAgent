@@ -62,6 +62,7 @@ struct ExpiryRemindersView: View {
                             ExpiryItemRow(item: item)
                         }
                     }
+                    .onDelete(perform: deleteItems)
                 }
                 .listStyle(.plain)
             }
@@ -103,6 +104,14 @@ struct ExpiryRemindersView: View {
         }
         .navigationTitle("Expiry Reminders")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func deleteItems(at offsets: IndexSet) {
+        for index in offsets {
+            let item = filteredItems[index]
+            NotificationService.shared.cancelNotification(for: item.id)
+            modelContext.delete(item)
+        }
     }
 }
 

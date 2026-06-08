@@ -19,7 +19,22 @@ final class UserSettings {
     var preferredUnit: String // "Gram (g)" or "Kilogram (kg)"
     var enableFamilySharing: Bool
 
-    init(id: UUID = UUID(), userName: String = "Priya", userEmail: String = "priya@example.com", profileImageData: Data? = nil, reminderTime: Date = Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: Date()) ?? Date(), enableNotifications: Bool = true, preferredUnit: String = "Gram (g)", enableFamilySharing: Bool = false) {
+    // New properties for AI recipe preferences
+    var preferredCuisine: String = "Indian Andhra" // User's preferred cuisine type
+    var dietaryPreferences: [String] = ["Non-Vegetarian"] // e.g., ["Vegetarian", "Non-Vegetarian"]
+
+    init(
+        id: UUID = UUID(),
+        userName: String = "Priya",
+        userEmail: String = "priya@example.com",
+        profileImageData: Data? = nil,
+        reminderTime: Date = Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: Date()) ?? Date(),
+        enableNotifications: Bool = true,
+        preferredUnit: String = "Gram (g)",
+        enableFamilySharing: Bool = false,
+        preferredCuisine: String = "Indian Andhra",
+        dietaryPreferences: [String] = ["Non-Vegetarian"]
+    ) {
         self.id = id
         self.userName = userName
         self.userEmail = userEmail
@@ -28,5 +43,7 @@ final class UserSettings {
         self.enableNotifications = enableNotifications
         self.preferredUnit = preferredUnit
         self.enableFamilySharing = enableFamilySharing
+        self.preferredCuisine = preferredCuisine
+        self.dietaryPreferences = dietaryPreferences
     }
 }
