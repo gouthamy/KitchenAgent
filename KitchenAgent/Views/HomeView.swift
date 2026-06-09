@@ -15,16 +15,20 @@ struct HomeView: View {
     @Query private var recipes: [Recipe]
 
     @State private var showingAddItem = false
+    @State private var errorMessage: String?
 
     private var userSettings: UserSettings {
-        if let existing = settings.first {
-            return existing
+        do {
+            return try modelContext.getOrCreateSettings()
+        } catch {
+            // Fallback to first existing or create without saving
+            if let existing = settings.first {
+                return existing
+            }
+            let newSettings = UserSettings()
+            modelContext.insert(newSettings)
+            return newSettings
         }
-        // Create and insert default settings if none exist
-        let newSettings = UserSettings()
-        modelContext.insert(newSettings)
-        try? modelContext.save()
-        return newSettings
     }
 
     private var expiringSoonItems: [FridgeItem] {
@@ -79,7 +83,7 @@ struct HomeView: View {
                                 } label: {
                                     Text("View All")
                                         .font(.subheadline)
-                                        .foregroundColor(.green)
+                                        .foregroundColor(Theme.Colors.primary)
                                 }
                             }
                             .padding(.horizontal)
@@ -184,7 +188,7 @@ struct RecipeCard: View {
     var body: some View {
         HStack(spacing: 12) {
             Circle()
-                .fill(Color.green.opacity(0.2))
+                .fill(Theme.Colors.primary.opacity(0.2))
                 .frame(width: 60, height: 60)
                 .overlay(
                     Image(systemName: "fork.knife")

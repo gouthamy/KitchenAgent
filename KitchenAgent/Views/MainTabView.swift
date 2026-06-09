@@ -31,23 +31,35 @@ struct MainTabView: View {
                 }
                 .tag(2)
 
+            FoodTrackingView()
+                .tabItem {
+                    Label("Track", systemImage: "camera.fill")
+                }
+                .tag(3)
+
+            MealPlanView()
+                .tabItem {
+                    Label("Plan", systemImage: "calendar")
+                }
+                .tag(4)
+
             ShoppingListView()
                 .tabItem {
                     Label("Shopping", systemImage: "cart.fill")
                 }
-                .tag(3)
+                .tag(5)
 
             SettingsView()
                 .tabItem {
-                    Label("Settings", systemImage: "gearshape.fill")
+                    Label("More", systemImage: "ellipsis")
                 }
-                .tag(4)
+                .tag(6)
         }
-        .accentColor(.green)
+        .accentColor(Theme.Colors.primary)
     }
 }
 
 #Preview {
     MainTabView()
-        .modelContainer(for: [FridgeItem.self, Recipe.self, ShoppingItem.self, UserSettings.self], inMemory: true)
+        .modelContainer(for: [FridgeItem.self, Recipe.self, ShoppingItem.self, UserSettings.self, MealPlan.self, PlannedMeal.self, FoodLog.self], inMemory: true)
 }

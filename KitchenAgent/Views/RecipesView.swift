@@ -20,13 +20,17 @@ struct RecipesView: View {
     @State private var aiError: String? = nil
 
     private var userSettings: UserSettings {
-        if let existing = settings.first {
-            return existing
+        do {
+            return try modelContext.getOrCreateSettings()
+        } catch {
+            // Fallback to first existing or create without saving
+            if let existing = settings.first {
+                return existing
+            }
+            let newSettings = UserSettings()
+            modelContext.insert(newSettings)
+            return newSettings
         }
-        let newSettings = UserSettings()
-        modelContext.insert(newSettings)
-        try? modelContext.save()
-        return newSettings
     }
 
     private var availableIngredients: [String] {

@@ -45,7 +45,7 @@ class ChatGPTRecipeService {
         expiringItems: [String]
     ) -> String {
         var prompt = """
-        You are a helpful cooking assistant. Generate 5 recipe suggestions based on the following:
+        You are a helpful cooking assistant. Generate 5 diverse recipe suggestions.
 
         Available Ingredients: \(ingredients.joined(separator: ", "))
 
@@ -58,35 +58,43 @@ class ChatGPTRecipeService {
         }
 
         if !expiringItems.isEmpty {
-            prompt += "Priority: Use these ingredients first (expiring soon): \(expiringItems.joined(separator: ", "))\n\n"
+            prompt += "Priority Ingredients (expiring soon): \(expiringItems.joined(separator: ", "))\n\n"
         }
 
         prompt += """
 
-        For each recipe, provide:
-        1. Recipe name (authentic to \(cuisine) cuisine)
-        2. Cooking time in minutes (realistic time)
-        3. Difficulty level (Easy/Medium/Hard)
-        4. List of required ingredients (use available ingredients as much as possible)
-        5. Brief cooking instructions (3-5 steps)
+        Generate 5 DIFFERENT recipes that:
+        1. Each recipe uses 3-6 ingredients from the available list (NOT all of them)
+        2. Show variety - different dishes, cooking methods, meal types
+        3. Are authentic to \(cuisine) cuisine
+        4. Are practical and delicious
 
-        Format your response as JSON array with this structure:
+        For each recipe, provide:
+        - Recipe name (authentic \(cuisine) dish)
+        - Cooking time in minutes (realistic)
+        - Difficulty level (Easy/Medium/Hard)
+        - List of required ingredients (SELECT subset from available, add common spices/staples if needed)
+        - Brief cooking instructions (3-5 clear steps)
+
+        Format your response as JSON array:
         [
           {
             "name": "Recipe Name",
             "cookingTime": 30,
             "difficulty": "Easy",
-            "ingredients": ["ingredient1", "ingredient2"],
+            "ingredients": ["ingredient1", "ingredient2", "ingredient3"],
             "instructions": ["Step 1", "Step 2", "Step 3"],
-            "matchingIngredientsCount": 5
+            "matchingIngredientsCount": 3
           }
         ]
 
-        IMPORTANT:
-        - Prioritize recipes that use expiring ingredients
-        - Make recipes authentic to \(cuisine) cuisine
-        - Respect dietary preferences: \(dietaryPreferences.joined(separator: ", "))
-        - Return ONLY valid JSON, no additional text
+        CRITICAL RULES:
+        - DO NOT try to combine all available ingredients into each recipe
+        - Each recipe should use different ingredients from the list
+        - Prioritize recipes using expiring ingredients first
+        - Make recipes varied (curry, stir-fry, rice dish, snack, etc.)
+        - Respect dietary preferences: \(dietaryPreferences.isEmpty ? "None" : dietaryPreferences.joined(separator: ", "))
+        - Return ONLY valid JSON, no markdown, no additional text
         """
 
         return prompt
@@ -152,6 +160,43 @@ class ChatGPTRecipeService {
             return String(text[startIndex...endIndex])
         }
         return text
+    }
+
+    /// Test OpenAI API connection
+    func testConnection() async throws {
+        guard let apiKey = UserDefaults.standard.string(forKey: "chatgpt_api_key"), !apiKey.isEmpty else {
+            throw RecipeError.noAPIKey
+        }
+
+        guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
+            throw RecipeError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 10
+
+        let requestBody: [String: Any] = [
+            "model": "gpt-4o-mini",
+            "messages": [
+                ["role": "user", "content": "Hi"]
+            ],
+            "max_tokens": 5
+        ]
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw RecipeError.invalidResponse
+        }
+
+        guard httpResponse.statusCode == 200 else {
+            throw RecipeError.apiError(httpResponse.statusCode, "Connection test failed")
+        }
     }
 }
 

@@ -11,11 +11,16 @@ import SwiftData
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var settings: [UserSettings]
+    @State private var errorMessage: String?
 
     private var userSettings: UserSettings {
-        if let existing = settings.first {
-            return existing
-        } else {
+        do {
+            return try modelContext.getOrCreateSettings()
+        } catch {
+            // Fallback to first existing or create without saving
+            if let existing = settings.first {
+                return existing
+            }
             let newSettings = UserSettings()
             modelContext.insert(newSettings)
             return newSettings
@@ -99,10 +104,22 @@ struct SettingsView: View {
                 // AI Features
                 Section(header: Text("AI Features")) {
                     NavigationLink {
+                        AIProviderSettingsView()
+                    } label: {
+                        HStack {
+                            Label("AI Provider", systemImage: "sparkles")
+                            Spacer()
+                            Text(AIServiceFactory.currentProvider.displayName)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    NavigationLink {
                         AISettingsView()
                     } label: {
                         HStack {
-                            Label("ChatGPT API Key", systemImage: "brain.head.profile")
+                            Label("Legacy: ChatGPT Only", systemImage: "brain.head.profile")
                             Spacer()
                             if let apiKey = UserDefaults.standard.string(forKey: "chatgpt_api_key"), !apiKey.isEmpty {
                                 Image(systemName: "checkmark.circle.fill")
@@ -111,7 +128,8 @@ struct SettingsView: View {
                             }
                         }
                     }
-                    Text("Get AI-powered recipe suggestions based on your ingredients and preferences")
+
+                    Text("Choose between OpenAI (GPT-4) or Anthropic Claude for AI features")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

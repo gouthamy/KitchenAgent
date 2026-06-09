@@ -15,7 +15,10 @@ struct KitchenAgentApp: App {
             FridgeItem.self,
             Recipe.self,
             ShoppingItem.self,
-            UserSettings.self
+            UserSettings.self,
+            MealPlan.self,
+            PlannedMeal.self,
+            FoodLog.self
         ])
 
         // Enable automatic migration for schema changes
@@ -49,7 +52,7 @@ struct KitchenAgentApp: App {
     init() {
         // Request notification permissions on app launch
         Task {
-            try? await NotificationService.shared.requestAuthorization()
+            _ = try? await NotificationService.shared.requestAuthorization()
         }
     }
 

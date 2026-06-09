@@ -18,8 +18,19 @@ final class Recipe {
     var ingredients: [String]
     var instructions: String
     var isFavorite: Bool
+    var nutrition: NutritionData? // Nutrition information
 
-    init(id: UUID = UUID(), name: String, imageName: String? = nil, cookingTime: Int, difficulty: Difficulty, ingredients: [String], instructions: String, isFavorite: Bool = false) {
+    init(
+        id: UUID = UUID(),
+        name: String,
+        imageName: String? = nil,
+        cookingTime: Int,
+        difficulty: Difficulty,
+        ingredients: [String],
+        instructions: String,
+        isFavorite: Bool = false,
+        nutrition: NutritionData? = nil
+    ) {
         self.id = id
         self.name = name
         self.imageName = imageName
@@ -28,6 +39,7 @@ final class Recipe {
         self.ingredients = ingredients
         self.instructions = instructions
         self.isFavorite = isFavorite
+        self.nutrition = nutrition
     }
 }
 
